@@ -13,11 +13,11 @@ namespace Weather.Tests
             _WeatherApi = new WeatherApi();
         }
         [Fact]
-        public void GivenAValidTokenAndUFShouldReturnSpecifiRegion()
+        public void GivenAValidTokenAndUFShouldReturnSpecifiCapital()
         {
             var response = _WeatherApi.GetCurrentWeather("2e626cae8c03409289d11817201610", "AM");
 
-            Assert.True(response.Location.Region == "Amazonas");
+            Assert.True(response.Location.Name == "Manaus");
         }
 
         [Fact]
