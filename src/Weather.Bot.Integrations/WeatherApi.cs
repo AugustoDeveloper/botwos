@@ -12,12 +12,12 @@ namespace Weather.Bot.Integrations
         {
             var client = new RestClient("http://api.weatherapi.com/v1");
 
-            var city = Helper.UfToState().Where(u => u.UF == uf.ToUpper()).Select(u => u.Name).FirstOrDefault();
-
-            if (string.IsNullOrEmpty(city))
+            if (!Helper.StatesFromBrazil.ContainsKey(uf.ToUpper()))
                 throw new Exception("Digita a uf direito co2");
 
-            var request = new RestRequest("current.json?key="+token+"&q="+city, DataFormat.Json);
+            var state = Helper.StatesFromBrazil[uf.ToUpper()];
+
+            var request = new RestRequest("current.json?key="+token+"&q="+state, DataFormat.Json);
 
             IRestResponse<WeatherApiResponseModel> response = client.Get<WeatherApiResponseModel>(request);
 
