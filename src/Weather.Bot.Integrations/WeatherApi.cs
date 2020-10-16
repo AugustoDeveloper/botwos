@@ -12,10 +12,10 @@ namespace Weather.Bot.Integrations
         {
             var client = new RestClient("http://api.weatherapi.com/v1");
 
-            if (!Helper.StatesFromBrazil.ContainsKey(uf.ToUpper()))
+            if (!Helper.CapitalsFromBrazil.ContainsKey(uf.ToUpper()))
                 throw new Exception("Digita a uf direito co2");
 
-            var state = Helper.StatesFromBrazil[uf.ToUpper()];
+            var state = Helper.CapitalsFromBrazil[uf.ToUpper()];
 
             var request = new RestRequest("current.json?key="+token+"&q="+state, DataFormat.Json);
 
