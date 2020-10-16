@@ -9,4 +9,10 @@
     <PackageReference Include="Discord.Net" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Weather.Bot.Integrations\Weather.Bot.Integrations.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\" />
+  </ItemGroup>
 </Project>
