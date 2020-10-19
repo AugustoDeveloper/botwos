@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Weather.Bot.Integrations\Weather.Bot.Integrations.csproj" />
+    <ProjectReference Include="..\..\src\Weather.Bot.Integrations\Weather.Bot.Integrations.csproj" />
   </ItemGroup>
 
 </Project>
