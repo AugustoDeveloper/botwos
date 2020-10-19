@@ -1,13 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Weather.Bot.Integrations.Exceptions;
 
-namespace Weather.Bot.Integrations
+namespace Weather.Bot.Integrations.Extensions
 {
-    public static class Helper
+    static public class StringExtension
     {
-
-        public static IReadOnlyDictionary<string, string> CapitalsFromBrazil = new Dictionary<string, string>
+        public static IReadOnlyDictionary<string, string> StatesCapitalsFromBrazil = new Dictionary<string, string>
         {
             {"AC", "Rio Branco"},
             {"AL", "Maceio"},
@@ -37,6 +35,14 @@ namespace Weather.Bot.Integrations
             {"SE", "Aracaju"},
             {"TO", "Palmas"},
         };
+        static public string ToCapital(this string uf)
+        {
+            if (!string.IsNullOrWhiteSpace(uf) && StatesCapitalsFromBrazil.ContainsKey(uf.Trim().ToUpper()))
+            {   
+                return StatesCapitalsFromBrazil[uf.Trim().ToUpper()];
+            }
 
+            throw new StateNotFoundException(uf);
+        }
     }
 }

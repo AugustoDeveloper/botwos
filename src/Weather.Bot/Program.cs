@@ -3,7 +3,13 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using Microsoft.Extensions.DependencyInjection;
 using Weather.Bot.Modules;
+using Weather.Bot.Integrations.Extensions;
+using Weather.Bot.Configurations;
+using Weather.Bot.Integrations.Configurations;
 
 namespace Weather.Bot
 {
@@ -11,38 +17,48 @@ namespace Weather.Bot
     {
         static private DiscordSocketClient client;
         static private CommandService commandService;
+        static private ServiceProvider provider;
 
         async static Task Main(string[] args)
         {
+            var builder = new ConfigurationBuilder();
+            builder.AddEnvironmentVariables("WEATHER_BOT_");
+            var configuration = builder.Build();
+
+            var services = new ServiceCollection();
+            services.AddWeatherApiClient(svc =>
+            {
+                var weatherConfiguration = configuration.GetSection("API").Get<WeatherApiConfiguration>();
+                svc.AddSingleton<IWeatherApiConfiguration>(weatherConfiguration);
+            });
+
+            provider = services.BuildServiceProvider();
+            var token = configuration.GetValue("Discord:Token", string.Empty);
+
             try
             {
-                client = new DiscordSocketClient(new DiscordSocketConfig
-                {
-                    LogLevel = LogSeverity.Debug
-                });
+                client = new DiscordSocketClient();
 
                 commandService = new CommandService(new CommandServiceConfig
                 {
                     CaseSensitiveCommands = false,
                 });
-                await commandService.AddModuleAsync<WeatherModule>(null);
+
+                await commandService.AddModuleAsync<WeatherModule>(provider);
 
                 client.Log += LogAsync;
                 client.MessageReceived += PerformMessageReceivedHandler;
-
-                var token = Environment.GetEnvironmentVariable("DISCORD_BOT_TOKEN");
                 
                 await client.LoginAsync(TokenType.Bot, token ?? throw new ArgumentNullException(token));
                 await client.StartAsync();
 
-                Console.ReadKey();
+                await Task.Delay(-1);
             }
             finally
             {
                 await client.LogoutAsync();
                 await client.StopAsync();
             }
-            Console.ReadKey();
         }
 
         async private static Task PerformMessageReceivedHandler(SocketMessage arg)
@@ -64,11 +80,11 @@ namespace Weather.Bot
             {
                 // Create a Command Context.
                 var context = new SocketCommandContext(client, msg);
-                var command = await commandService.GetExecutableCommandsAsync(context, null);
+                var command = await commandService.GetExecutableCommandsAsync(context, provider);
 
                 // Execute the command. (result does not indicate a return value, 
                 // rather an object stating if the command executed successfully).
-                var result = await commandService.ExecuteAsync(context, pos, null);
+                var result = await commandService.ExecuteAsync(context, pos, provider);
 
                 // Uncomment the following lines if you want the bot
                 // to send a message if it failed.

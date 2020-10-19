@@ -1,18 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Weather.Bot.Integrations\Weather.Bot.Integrations.csproj" />
+    <PackageReference Include="Discord.Net" Version="2.2.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9"/>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modules\" />
+    <ProjectReference Include="..\Weather.Bot.Integrations\Weather.Bot.Integrations.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\"/>
   </ItemGroup>
 </Project>
