@@ -1,27 +1,36 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Weather.Bot.Integrations.Configurations;
+using Weather.Bot.Integrations.Extensions;
+using Weather.Bot.Integrations.Models;
 
 namespace Weather.Bot.Integrations
 {
     public sealed class WeatherApi : IWeatherApi
     {
-        public WeatherApiResponseModel GetCurrentWeather(string token, string uf)
+        private readonly HttpClient client;
+        private readonly IWeatherApiConfiguration configuration;
+        public WeatherApi(HttpClient client, IWeatherApiConfiguration configuration)
         {
-            var client = new RestClient("http://api.weatherapi.com/v1");
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
 
-            if (!Helper.CapitalsFromBrazil.ContainsKey(uf.ToUpper()))
-                throw new Exception("Digita a uf direito co2");
+        async public Task<WeatherApiResponseModel> GetCurrentWeatherAsync(string uf)
+        {
+            var response = await this.client.GetAsync($"current.json?key={configuration.Key}&q={uf.ToCapital()}");
+            response.EnsureSuccessStatusCode();
 
-            var state = Helper.CapitalsFromBrazil[uf.ToUpper()];
+            var responseBodyText = await response.Content.ReadAsStringAsync();
 
-            var request = new RestRequest("current.json?key="+token+"&q="+state, DataFormat.Json);
+            if (string.IsNullOrWhiteSpace(responseBodyText))
+            {
+                throw new InvalidOperationException("The content is invalid to perform this operation.");
+            }
 
-            IRestResponse<WeatherApiResponseModel> response = client.Get<WeatherApiResponseModel>(request);
-
-            return response.Data;
+            return JsonConvert.DeserializeObject<WeatherApiResponseModel>(responseBodyText);
         }
     }
 }

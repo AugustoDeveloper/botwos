@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weather.Bot", "src\Weather.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weather.Bot.Integrations", "src\Weather.Bot.Integrations\Weather.Bot.Integrations.csproj", "{E41071B2-F0D4-4D79-98BC-755770061328}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Tests", "Weather.Tests\Weather.Tests.csproj", "{EF2E9A75-6C46-4A77-9BBF-55F3F9042BDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Tests", "tests\Weather.Tests\Weather.Tests.csproj", "{EF2E9A75-6C46-4A77-9BBF-55F3F9042BDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
