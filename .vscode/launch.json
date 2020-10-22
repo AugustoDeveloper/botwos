@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "SerieA - Debug",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Weather.Bot/bin/Debug/netcoreapp3.1/Weather.Bot.dll",
+            "program": "${workspaceFolder}/src/Botwos.SerieA.Bot/bin/Debug/netcoreapp3.1/Botwos.SerieA.Bot.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/Weather.Bot",
+            "cwd": "${workspaceFolder}/src/Botwos.SerieA.Bot",
             "console": "internalConsole",
             "stopAtEntry": false
         },
