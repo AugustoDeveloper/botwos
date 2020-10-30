@@ -5,6 +5,6 @@ namespace Botwos.Infrastructure.Integrations
 {
     public interface IWeatherApi
     {
-        Task<WeatherApiResponseModel> GetCurrentWeatherAsync(string uf);
+        Task<WeatherApiResponseModel> GetCurrentWeatherAsync(string stateOrCity);
     }
 }

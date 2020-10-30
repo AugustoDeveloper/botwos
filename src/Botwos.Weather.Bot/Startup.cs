@@ -26,6 +26,7 @@ namespace Botwos.Weather.Bot
         {
             services.AddControllers();
             services.AddLogging(l => l.AddConsole());
+            services.AddLocalization(l => l.ResourcesPath = "Resources");
             services
                 .AddWeatherApiClient(svc =>
                 {

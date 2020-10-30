@@ -18,9 +18,9 @@ namespace Botwos.Infrastructure.Integrations
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        async public Task<WeatherApiResponseModel> GetCurrentWeatherAsync(string uf)
+        async public Task<WeatherApiResponseModel> GetCurrentWeatherAsync(string stateOrCity)
         {
-            var response = await this.client.GetAsync($"current.json?key={configuration.Key}&q={uf.ToCapital()}");
+            var response = await this.client.GetAsync($"current.json?key={configuration.Key}&q={stateOrCity.ToCapitalIfExists()}");
             response.EnsureSuccessStatusCode();
 
             var responseBodyText = await response.Content.ReadAsStringAsync();

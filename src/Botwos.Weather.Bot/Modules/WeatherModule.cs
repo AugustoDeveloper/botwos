@@ -2,31 +2,44 @@
 using Discord.Commands;
 using Botwos.Infrastructure.Integrations;
 using Botwos.Infrastructure.Integrations.Exceptions.Weather;
+using System.Linq;
+using System.Net.Http;
+using Botwos.Weather.Bot.Resources;
+using System.Globalization;
 
 namespace Botwos.Weather.Bot.Modules
 {
-    [Group("weather")]
     public class WeatherModule : ModuleBase<SocketCommandContext>
     {
         private readonly IWeatherApi api;
+
         public WeatherModule(IWeatherApi api)
         {
             this.api = api;
         }
 
-        [Command("")]
-        [Summary("Get a weather on Brasil's state")]
-        async public Task GetWeatherFromAsync([Summary("State from Brasil")] string state)
+        
+        async private Task GetWeatherFromAsync(string stateOrCity, string lang)
         {
+            var culture = CultureInfo.GetCultureInfo(lang);
             try 
             {
-                var response = await api.GetCurrentWeatherAsync(state);
-                await Context.Channel.SendMessageAsync($"It is {response.Current.TempC}°C in {response.Location.Name}");
+                var format = Messages.ResourceManager.GetString("WeatherResponseFormat", culture);
+                var response = await api.GetCurrentWeatherAsync(stateOrCity);
+                await Context.Channel.SendMessageAsync(string.Format(format, response.Current.TempC, response.Location.Name, response.Location.Region, response.Location.Country));
             }
-            catch(StateNotFoundException ex)
+            catch(HttpRequestException)
             {
-                await Context.Channel.SendMessageAsync(ex.Message);
+                await Context.Channel.SendMessageAsync(Messages.ResourceManager.GetString("CityOrStateWasNotFound", culture));
             }
         }
+        
+        [Command("weather", true), Summary("Get a weather on Brasil's state\\city")]
+        public Task PerformWeatherCommandAsync([Summary("State\\City from Brasil")] params string[] stateOrCity)
+            =>  GetWeatherFromAsync(stateOrCity.Aggregate((cityA, cityB) => $"{cityA} {cityB}"), "en-US");
+
+        [Command("clima", true), Summary("Busca a temperatura em um estado\\cidade")]
+        public Task PerformClimaCommandAsync([Summary("Estado\\Cidade do Brasil")] params string[] stateOrCity)
+            =>  GetWeatherFromAsync(stateOrCity.Aggregate((cityA, cityB) => $"{cityA} {cityB}"), "pt-BR");
     }
 }
