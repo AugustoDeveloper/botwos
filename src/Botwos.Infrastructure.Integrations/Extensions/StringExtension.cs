@@ -35,14 +35,14 @@ namespace Botwos.Infrastructure.Integrations.Extensions
             {"SE", "Aracaju"},
             {"TO", "Palmas"},
         };
-        static public string ToCapital(this string uf)
+        static public string ToCapitalIfExists(this string stateOrCity)
         {
-            if (!string.IsNullOrWhiteSpace(uf) && StatesCapitalsFromBrazil.ContainsKey(uf.Trim().ToUpper()))
+            if (!string.IsNullOrWhiteSpace(stateOrCity) && StatesCapitalsFromBrazil.ContainsKey(stateOrCity.Trim().ToUpper()))
             {   
-                return StatesCapitalsFromBrazil[uf.Trim().ToUpper()];
+                return StatesCapitalsFromBrazil[stateOrCity.Trim().ToUpper()];
             }
 
-            throw new StateNotFoundException(uf);
+            return stateOrCity;
         }
     }
 }

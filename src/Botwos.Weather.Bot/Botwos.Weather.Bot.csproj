@@ -3,16 +3,40 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Weather.Bot' " />
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.2.0"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9"/>
+    <PackageReference Include="Discord.Net" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Botwos.Infrastructure.Bot\Botwos.Infrastructure.Bot.csproj"/>
-    <ProjectReference Include="..\Botwos.Infrastructure.Integrations\Botwos.Infrastructure.Integrations.csproj"/>
+    <ProjectReference Include="..\Botwos.Infrastructure.Bot\Botwos.Infrastructure.Bot.csproj" />
+    <ProjectReference Include="..\Botwos.Infrastructure.Integrations\Botwos.Infrastructure.Integrations.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modules\"/>
+    <Folder Include="Modules\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Resources.pt-BR.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Messages.pt-BR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.pt-BR.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Messages.Designer.cs">
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Messages.pt-BR.Designer.cs">
+      <DependentUpon>Messages.pt-BR.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
