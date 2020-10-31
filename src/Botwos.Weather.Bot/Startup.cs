@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Botwos.Infrastructure.Bot.Extensions;
 using System.IO;
+using Botwos.Weather.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Botwos.Weather.Bot
 {
@@ -28,6 +30,12 @@ namespace Botwos.Weather.Bot
             services.AddLogging(l => l.AddConsole());
             services.AddLocalization(l => l.ResourcesPath = "Resources");
             services
+                    .AddEntityFrameworkNpgsql()
+                    .AddDbContext<DbResponsesContext>(opt =>
+                    {
+                        opt.UseNpgsql(Configuration.GetConnectionString("ResponsesDb"));
+                    });
+            services
                 .AddWeatherApiClient(svc =>
                 {
                     var weatherConfiguration = Configuration.GetSection("API").Get<WeatherApiConfiguration>();
@@ -45,15 +53,15 @@ namespace Botwos.Weather.Bot
             var logger = loggerFactory.CreateLogger("webhook");
 
             app.UseRouting();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            app.Map("/webhook", inApp => 
+            app.Map("/webhook", inApp =>
             {
-                inApp.Run(async context => 
+                inApp.Run(async context =>
                 {
                     using var streamReader = new StreamReader(context.Request.Body);
                     var body = await streamReader.ReadToEndAsync();
