@@ -5,6 +5,12 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Weather.Bot' " />
   <ItemGroup>
+    <Compile Remove="Utils\**" />
+    <Content Remove="Utils\**" />
+    <EmbeddedResource Remove="Utils\**" />
+    <None Remove="Utils\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
@@ -12,10 +18,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Botwos.Infrastructure.Bot\Botwos.Infrastructure.Bot.csproj" />
     <ProjectReference Include="..\Botwos.Infrastructure.Integrations\Botwos.Infrastructure.Integrations.csproj" />
+    <ProjectReference Include="..\Botwos.Weather.Infrastructure.Persistence\Botwos.Weather.Infrastructure.Persistence.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\" />
-    <Folder Include="Utils\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
