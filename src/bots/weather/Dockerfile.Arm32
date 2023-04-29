@@ -1,0 +1,5 @@
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-bullseye-slim-arm32v7 AS base
+WORKDIR /app
+COPY ["out/arm", "./"]
+
+ENTRYPOINT ["./Botwos.Bots.Weather"]
